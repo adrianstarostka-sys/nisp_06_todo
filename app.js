@@ -1,30 +1,41 @@
 // app.js
 
-// Pobranie niezbędnych elementów z drzewa DOM
 const button = document.querySelector('#add-task-btn');
 const input = document.querySelector('#task-input');
 const taskList = document.querySelector('#task-list');
 
-// Obsługa zdarzenia kliknięcia przycisku
 button.addEventListener('click', (event) => {
-    // Zatrzymanie domyślnego wysyłania formularza (przeładowania strony)
     event.preventDefault();
-
-    // Pobranie wartości z pola input
     const taskText = input.value.trim();
 
-    // Weryfikacja, czy pole nie jest puste przed dodaniem
     if (taskText !== '') {
-        // Utworzenie nowego elementu li
         const li = document.createElement('li');
         
-        // Przypisanie pobranej wartości tekstowej do elementu li
-        li.textContent = taskText;
+        // Utworzenie elementu checkbox zgodnie z nowym wymaganiem
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        
+        // Dodanie nasłuchiwania na zmianę stanu checkboxa
+        checkbox.addEventListener('change', function() {
+            // Przełączanie klasy 'completed' w elemencie li
+            // Jeśli checkbox jest zaznaczony, klasa zostanie dodana, w przeciwnym razie usunięta
+            if (this.checked) {
+                li.classList.add('completed');
+            } else {
+                li.classList.remove('completed');
+            }
+        });
 
-        // Dodanie utworzonego elementu li do listy #task-list
+        // Opakowanie tekstu zadania w element span ułatwia jego układanie (Flexbox) 
+        // obok checkboxa, zapobiegając błędom formatowania
+        const textSpan = document.createElement('span');
+        textSpan.textContent = taskText;
+
+        // Dodanie checkboxa oraz tekstu do elementu li
+        li.appendChild(checkbox);
+        li.appendChild(textSpan);
+
         taskList.appendChild(li);
-
-        // Wyczyszczenie pola input po pomyślnym dodaniu zadania
         input.value = '';
     }
 });
